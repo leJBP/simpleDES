@@ -1,3 +1,5 @@
+BLOCK_SIZE = 12
+KEY_SIZE = 8
 
 S1 = [["101", "010", "001", "110", "011", "100", "111", "000"],
       ["011", "100", "110", "010", "000", "111", "101", "011"]]
@@ -62,7 +64,7 @@ class DES:
         # Apply expansion permutation
         expanded = DES.expander(right_half)
         # XOR with key
-        xored_block = bin(int(expanded, 2) ^ int(key, 2))[2:].zfill(len(expanded))
+        xored_block = (bin(int(expanded, 2) ^ int(key.zfill(KEY_SIZE), 2))[2:]).zfill(KEY_SIZE)
         # Apply S-boxes
         (s1, s2) = DES.S_boxes(xored_block)
         return s1 + s2

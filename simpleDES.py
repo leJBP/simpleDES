@@ -1,6 +1,6 @@
-from DES_tools import DES, DES_tools
+from DES_tools import DES, DES_tools, BLOCK_SIZE
 
-BLOCK_SIZE = 12
+
 
 def binary_string_to_text(binary_str):
     # Ensure the binary string length is a multiple of 8
