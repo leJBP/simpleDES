@@ -18,23 +18,25 @@ class DES_tools:
         # Slice the text into blocks of size 'size' and return a list of blocks
         blocks = []
         for i in range(0, len(text), size):
-            # Padding is following RFC 2898 recommendation https://www.rfc-editor.org/rfc/rfc2898#section-6.1.1
             padding = ""
             if i+size > len(text):
                 padding += (i+size - len(text)) * "0"
-                #padding_value = (i + size - len(text)) & 0xFF
-                #padding = DES_tools.to_binary(chr(padding_value)) * (i + size - len(text))
-                #print(hex(padding_value))
-                #print(padding)
             blocks.append(text[i:i+size] + padding)
 
         return blocks
 
-    def key_schedule(key):
-
-        return key
-
 class DES:
+
+    def key_schedule(key, rounds):
+        keys = []
+
+        # Create permutations
+        for i in range(rounds):
+            permutation = ""
+            permutation += key[i:] + key[:i]
+            keys.append(permutation)
+
+        return keys
 
     def S_boxes(block):
         left_half = block[:len(block)//2]
@@ -72,4 +74,4 @@ class DES:
     def decrypt(key, block):
         L_i = block[:len(block)//2]
         R_i = block[len(block)//2:]
-        return R_i + bin(int(L_i, 2) ^ int(DES.feistel(key, R_i), 2))[2:]
+        return bin(int(R_i, 2) ^ int(DES.feistel(key, L_i), 2))[2:] + L_i
