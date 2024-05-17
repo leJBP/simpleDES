@@ -72,9 +72,9 @@ class DES:
     def encrypt(key, block):
         L_i = block[:len(block)//2]
         R_i = block[len(block)//2:]
-        return R_i + (bin(int(L_i, 2) ^ int(DES.f(key, R_i), 2))[2:])
+        return R_i.zfill(BLOCK_SIZE//2) + (bin(int(L_i, 2) ^ int(DES.f(key, R_i), 2))[2:]).zfill(BLOCK_SIZE//2)
 
     def decrypt(key, block):
         L_i = block[:len(block)//2]
         R_i = block[len(block)//2:]
-        return (bin(int(R_i, 2) ^ int(DES.f(key, L_i), 2))[2:]) + L_i
+        return (bin(int(R_i, 2) ^ int(DES.f(key, L_i), 2))[2:]).zfill(BLOCK_SIZE//2) + L_i.zfill(BLOCK_SIZE//2)

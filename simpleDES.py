@@ -24,7 +24,7 @@ def encrypt(keys, plaintext, rounds):
     ciphertext = []
     for block in blocks:
         for i in range(rounds):
-            block = DES.encrypt(keys[i], block).zfill(BLOCK_SIZE)
+            block = DES.encrypt(keys[i], block)
         ciphertext.append(block)
 
     return "".join(ciphertext)
@@ -36,7 +36,7 @@ def decrypt(keys, ciphertext, rounds):
     plaintext = []
     for block in blocks:
         for i in range(rounds):
-            block = DES.decrypt(keys[i], block).zfill(BLOCK_SIZE)
+            block = DES.decrypt(keys[i], block)
         plaintext.append(block)
 
     return "".join(plaintext)
@@ -45,9 +45,9 @@ plaintext = input("Enter the plain text: ").strip()
 key = input("Enter the key (8 bits): ").strip()
 rounds = int(input("Enter the number of rounds for DES: "))
 
-#plaintext = "oui"
+#plaintext = "test"
 #key = "01010101"
-#rounds = 5
+#rounds = 10
 
 keys = DES.key_schedule(key, rounds)
 
