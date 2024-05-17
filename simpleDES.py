@@ -45,6 +45,10 @@ plaintext = input("Enter the plain text: ").strip()
 key = input("Enter the key (8 bits): ").strip()
 rounds = int(input("Enter the number of rounds for DES: "))
 
+#plaintext = "oui"
+#key = "01010101"
+#rounds = 5
+
 keys = DES.key_schedule(key, rounds)
 
 print(f"\nThe original binary plaintext is: {DES_tools.to_binary(plaintext)}")
