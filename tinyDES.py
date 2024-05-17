@@ -1,4 +1,4 @@
-from DES_tools import DES_encrypt, DES_decrypt, DES_tools
+from DES_tools import DES, DES_tools
 
 BLOCK_SIZE = 12
 
@@ -16,20 +16,30 @@ def binary_string_to_text(binary_str):
 
     return text
 
-def encrypt(key, plain_text, rounds):
-    binary_text = DES_tools.to_binary(plain_text)
+def encrypt(key, plaintext, rounds):
+    binary_text = DES_tools.to_binary(plaintext)
     blocks = DES_tools.slice_text(binary_text, 12)
 
-    cipher_text = []
+    ciphertext = []
     for block in blocks:
         for _ in range(rounds):
-            block = DES_encrypt.DES(key, block).zfill(BLOCK_SIZE)
-        cipher_text.append(block)
+            block = DES.encrypt(key, block).zfill(BLOCK_SIZE)
+        ciphertext.append(block)
 
-    return "".join(cipher_text)
+    return "".join(ciphertext)
 
-def decrypt(key, cipher_text, rounds):
-    pass
+def decrypt(key, ciphertext, rounds):
+    blocks = DES_tools.slice_text(ciphertext, 12)
+
+    print(blocks)
+
+    plaintext = []
+    for block in blocks:
+        for _ in range(rounds):
+            block = DES.decrypt(key, block).zfill(BLOCK_SIZE)
+        plaintext.append(block)
+
+    return "".join(plaintext)
 
 #plaintext = input("Enter the plain text: ")
 #key = input("Enter the key (8 bits): ")
@@ -39,12 +49,15 @@ plaintext = "test"
 key = "10101010"
 rounds = 5
 
+print(f"The binary plaintext is: {DES_tools.to_binary(plaintext)}\n")
+
 # Encrypt the plain text
 cipher_text = encrypt(key, plaintext, rounds)
-print(f"The binary cipher text is: {cipher_text}")
-print(f"The printable cipher text is: {binary_string_to_text(cipher_text)}")
+print(f"The binary ciphertext is: {cipher_text}")
+print(f"The printable ciphertext is: {binary_string_to_text(cipher_text)}\n")
 
 # Decrypt the cipher text
-#plain_text = decrypt(key, cipher_text, rounds)
-#print(f"The plain text is: {plain_text}")
+plain_text = decrypt(key, cipher_text, rounds)
+print(f"The binary plaintext is: {plain_text}")
+print(f"The printable plaintext is: {binary_string_to_text(plain_text)}\n")
 

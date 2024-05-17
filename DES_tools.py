@@ -1,3 +1,10 @@
+
+S1 = [["101", "010", "001", "110", "011", "100", "111", "000"],
+      ["011", "100", "110", "010", "000", "111", "101", "011"]]
+
+S2 = [["100", "000", "110", "101", "111", "001", "011", "010"],
+      ["101", "011", "000", "111", "110", "010", "001", "100"]]
+
 class DES_tools:
 
     def to_binary(text):
@@ -23,13 +30,11 @@ class DES_tools:
 
         return blocks
 
-class DES_encrypt:
+    def key_schedule(key):
 
-    S1 = [["101", "010", "001", "110", "011", "100", "111", "000"],
-          ["011", "100", "110", "010", "000", "111", "101", "011"]]
+        return key
 
-    S2 = [["100", "000", "110", "101", "111", "001", "011", "010"],
-          ["101", "011", "000", "111", "110", "010", "001", "100"]]
+class DES:
 
     def S_boxes(block):
         left_half = block[:len(block)//2]
@@ -38,12 +43,12 @@ class DES_encrypt:
         # Apply S-box 1
         lines = int(left_half[0])
         columns = int(left_half[1:], 2)
-        s1 = DES_encrypt.S1[lines][columns]
+        s1 = S1[lines][columns]
 
         # Apply S-box 2
         lines = int(right_half[0])
         columns = int(right_half[1:], 2)
-        s2 = DES_encrypt.S2[lines][columns]
+        s2 = S2[lines][columns]
 
         return (s1, s2)
 
@@ -52,34 +57,19 @@ class DES_encrypt:
 
     def feistel(key, right_half):
         # Apply expansion permutation
-        expanded = DES_encrypt.expander(right_half)
+        expanded = DES.expander(right_half)
         # XOR with key
         xored_block = bin(int(expanded, 2) ^ int(key, 2))[2:].zfill(len(expanded))
         # Apply S-boxes
-        (s1, s2) = DES_encrypt.S_boxes(xored_block)
+        (s1, s2) = DES.S_boxes(xored_block)
         return s1 + s2
 
-    def DES(key, block):
+    def encrypt(key, block):
         L_i = block[:len(block)//2]
         R_i = block[len(block)//2:]
-        return R_i + bin(int(L_i, 2) ^ int(DES_encrypt.feistel(key, R_i), 2))[2:]
+        return R_i + bin(int(L_i, 2) ^ int(DES.feistel(key, R_i), 2))[2:]
 
-class DES_decrypt:
-
-    S1 = [["101", "010", "001", "110", "011", "100", "111", "000"],
-          ["011", "100", "110", "010", "000", "111", "101", "011"]]
-
-    S2 = [["100", "000", "110", "101", "111", "001", "011", "010"],
-          ["101", "011", "000", "111", "110", "010", "001", "100"]]
-
-    def reverse_S_boxes():
-        pass
-
-    def reverse_expander():
-        pass
-
-    def reverse_feistel():
-        pass
-
-    def reverse_DES():
-        pass
+    def decrypt(key, block):
+        L_i = block[:len(block)//2]
+        R_i = block[len(block)//2:]
+        return R_i + bin(int(L_i, 2) ^ int(DES.feistel(key, R_i), 2))[2:]
