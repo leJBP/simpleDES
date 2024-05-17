@@ -21,6 +21,7 @@ class DES_tools:
             padding = ""
             if i+size > len(text):
                 padding += (i+size - len(text)) * "0"
+                print(f"Padding du message: {padding}\n")
             blocks.append(text[i:i+size] + padding)
 
         return blocks
@@ -30,7 +31,7 @@ class DES:
     def key_schedule(key, rounds):
         keys = []
 
-        # Create permutations
+        # Create key permutations
         for i in range(rounds):
             permutation = ""
             permutation += key[i:] + key[:i]
@@ -57,7 +58,7 @@ class DES:
     def expander(block):
         return block[:2] + block[3] + block[2:4] + block[2] + block[4:]
 
-    def feistel(key, right_half):
+    def f(key, right_half):
         # Apply expansion permutation
         expanded = DES.expander(right_half)
         # XOR with key
@@ -69,9 +70,9 @@ class DES:
     def encrypt(key, block):
         L_i = block[:len(block)//2]
         R_i = block[len(block)//2:]
-        return R_i + bin(int(L_i, 2) ^ int(DES.feistel(key, R_i), 2))[2:]
+        return R_i + (bin(int(L_i, 2) ^ int(DES.f(key, R_i), 2))[2:])
 
     def decrypt(key, block):
         L_i = block[:len(block)//2]
         R_i = block[len(block)//2:]
-        return bin(int(R_i, 2) ^ int(DES.feistel(key, L_i), 2))[2:] + L_i
+        return (bin(int(R_i, 2) ^ int(DES.f(key, L_i), 2))[2:]) + L_i
