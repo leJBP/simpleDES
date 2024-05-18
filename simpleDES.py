@@ -1,6 +1,13 @@
 from DES_tools import DES, DES_tools, BLOCK_SIZE
 
-
+def help():
+    print("\nUsage: python simpleDES.py")
+    print("This program encrypts and decrypts a plaintext using the simple DES algorithm.")
+    print("The program will prompt the user to enter the plaintext, key, and the number of rounds for DES.")
+    print("The key must be 8 bits long and the plaintext can be any length.")
+    print("The number of rounds must be a positive integer.")
+    print("The program will then output the encrypted and decrypted plaintext in binary and printable format.")
+    exit()
 
 def binary_string_to_text(binary_str):
     # Ensure the binary string length is a multiple of 8
@@ -41,14 +48,28 @@ def decrypt(keys, ciphertext, rounds):
 
     return "".join(plaintext)
 
-plaintext = input("Enter the plain text: ").strip()
-key = input("Enter the key (8 bits): ").strip()
-rounds = int(input("Enter the number of rounds for DES: "))
+rounds = 0
+plaintext = ""
+key = ""
 
-#plaintext = "test"
-#key = "01010101"
-#rounds = 10
+try:
+    plaintext = input("Enter the plain text: ").strip()
+    key = input("Enter the key (8 bits): ").strip()
+    rounds = int(input("Enter the number of rounds for DES: "))
+except Exception:
+    help()
 
+# Verify if the number of rounds is a positive integer
+if rounds <= 0:
+    rounds = -rounds
+    print("The number of rounds must be a positive integer. Using the absolute value instead.")
+
+# Verify if the key is 8 bits only composed of 0s and 1s
+if not all(bit in '01' for bit in key) or len(key) != 8:
+    help()
+
+# Schedule the keys
+print(f"Keys scheduled for {rounds} rounds")
 keys = DES.key_schedule(key, rounds)
 
 print(f"\nThe original binary plaintext is: {DES_tools.to_binary(plaintext)}")
