@@ -1,5 +1,19 @@
-Simple DES with 12 bits block and 8 bits key
+# Simple DES
 
-Use simpleDES.py to use the program
+Simple DES version with 12 bits blocks and 8 bits long key.
 
-I don't understand why I don't get the correct decrypted plaintext, my algorithm seems good to me.
+## Implementation
+This little is an implementation of a simple DES. This cryptographic algorithm is depicted on the image below. The second image is the F-function used in this algorithm.
+
+![drawing](figures/feistel.png)
+![drawing](figures/f_function.png)
+
+## Usage
+
+To use this programm use the following command:
+
+```
+python3 simpleDES.py
+```
+
+then, the program will ask you for a text to encrpyt a key and number of rounds you want to use to encrypt your input.
